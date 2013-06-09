@@ -36,6 +36,16 @@ class Item extends \ArrayObject
 			$arr['valor_total'] = null;
 		}
 
+		if(!isset($arr['peso']))
+		{
+			$arr['peso'] = 0;
+		}
+
+		if(!isset($arr['custo_frete']))
+		{
+			$arr['custo_frete'] = 0;
+		}
+
 		if(!isset($arr['_raw']))
 		{
 			$arr['_raw'] = null;

@@ -53,10 +53,10 @@ class Pagseguro extends GatewayAbstract
 			$paymentRequest->addItem(
 				$item->id,
 				$item->nome,
-				1,
-				money_format('%!i', $item->valor_total),
-				0,
-				0
+				$item->quantidade,
+				money_format('%!i', $item->valor_unidade),
+				$item->peso,
+				$item->custo_frete
 			);
 		}
 
