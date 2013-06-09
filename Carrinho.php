@@ -89,14 +89,14 @@ class Carrinho
 		return new \ArrayObject($this->getStorage()->itens->getArrayCopy());
 	}
 
-	protected function itemExists($item)
+	public function itemExists($itemId)
 	{
-		return $this->getStorage()->itens->offsetExists($item->id);
+		return $this->getStorage()->itens->offsetExists($itemId);
 	}
 
-	protected function getItem($item)
+	public function getItem($itemId)
 	{
-		return $this->getStorage()->itens->offsetGet($item->id);
+		return $this->getStorage()->itens->offsetGet($itemId);
 	}
 
 	protected function _addItem($item)
@@ -116,13 +116,13 @@ class Carrinho
 
 	public function addItem(Item $item)
 	{
-		if( !$this->itemExists($item) )
+		if( !$this->itemExists($item->id) )
 		{
 			$this->_addItem($item);
 		}
 		else
 		{
-			$_item = $this->getItem($item);
+			$_item = $this->getItem($item->id);
 
 			if($_item instanceof Item)
 			{
@@ -151,7 +151,7 @@ class Carrinho
 
 	public function removeItem(Item $item)
 	{
-		if( $this->itemExists($item) )
+		if( $this->itemExists($item->id) )
 		{
 			$this->_removeItem($item);
 		}
