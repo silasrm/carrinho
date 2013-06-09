@@ -2,7 +2,7 @@
 
 namespace Carrinho;
 
-require_once __DIR__ . '/Storage.php';
+require_once __DIR__ . '/Storage/Session.php';
 require_once __DIR__ . '/Item.php';
 require_once __DIR__ . '/Cupom.php';
 require_once __DIR__ . '/Cliente.php';
@@ -25,7 +25,7 @@ class Carrinho
 	{
 		if(empty($storage) || !($storage instanceof Storage))
 		{
-			$storage = new Storage;
+			$storage = new Storage\Session;
 		}
 
 		$this->setStorage($storage);

@@ -1,8 +1,10 @@
 <?php
 
-namespace Carrinho;
+namespace Carrinho\Storage;
 
-class Storage implements \IteratorAggregate
+require_once __DIR__ . '/StorageAbstract.php';
+
+class Session extends StorageAbstract
 {
 	private $_storageName = '__Carrinho';
 
