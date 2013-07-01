@@ -24,7 +24,7 @@ class Carrinho
 
 	public function __construct($storage = null)
 	{
-		if(empty($storage) || !($storage instanceof Storage))
+		if(empty($storage) || !($storage instanceof Storage\StorageAbstract))
 		{
 			$storage = new Storage\Session;
 		}
