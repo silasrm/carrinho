@@ -15,6 +15,7 @@ class Carrinho
 {
 	const LIMPA_ITENS = 'itens';
 	const LIMPA_CUPOM = 'cupom';
+	const LIMPA_FRETE = 'frete';
 	const LIMPA_CLIENTE = 'cliente';
 	const LIMPA_ENDERECO = 'endereco';
 	const LIMPA_ALL = 'all';
@@ -48,6 +49,16 @@ class Carrinho
 		if(is_null($this->getStorage()->endereco))
 		{
 			$this->getStorage()->endereco = false;
+		}
+
+		if(is_null($this->getStorage()->frete))
+		{
+			$this->getStorage()->frete = false;
+		}
+
+		if(is_null($this->getStorage()->subTotal))
+		{
+			$this->getStorage()->subTotal = 0;
 		}
 
 		if(is_null($this->getStorage()->total))
@@ -135,6 +146,7 @@ class Carrinho
 			}
 		}
 
+		$this->atualizaSubTotal();
 		$this->atualizaTotal();
 
 		return $this;
@@ -144,6 +156,7 @@ class Carrinho
 	{
 		$this->_addItem($item);
 
+		$this->atualizaSubTotal();
 		$this->atualizaTotal();
 
 		return $this;
@@ -156,14 +169,18 @@ class Carrinho
 			$this->_removeItem($item);
 		}
 
+		$this->atualizaSubTotal();
 		$this->atualizaTotal();
 
 		return $this;
 	}
 
-	public function setCupom($cupom)
+	public function setCupom(\Carrinho\Cupom $cupom)
 	{
 		$this->getStorage()->cupom = $cupom;
+
+		$this->atualizaSubTotal();
+		$this->atualizaTotal();
 
 		return $this;
 	}
@@ -173,17 +190,53 @@ class Carrinho
 		return $this->getStorage()->cupom;
 	}
 
-	public function atualizaTotal()
+	public function setFrete(\Carrinho\Frete $frete)
+	{
+		$this->getStorage()->frete = $frete;
+
+		$this->atualizaSubTotal();
+		$this->atualizaTotal();
+
+		return $this;
+	}
+
+	public function getFrete()
+	{
+		return $this->getStorage()->frete;
+	}
+
+	public function atualizaSubTotal()
 	{
 		$itens = $this->getItens();
 
-		$total = 0;
+		$valor = 0;
 		foreach($itens as $item)
 		{
-			$total += $item->valor_total;
+			$valor += $item->valor_total;
 		}
 
-		$this->setTotal($total);
+		$this->setSubTotal($valor);
+
+		return $this;
+	}
+
+	public function atualizaTotal()
+	{
+		$valor = $this->getSubTotal();
+
+		$cupom = $this->getCupom();
+		if(!empty($cupom) && !empty($cupom['valor']))
+		{
+			$valor -= $cupom['valor'];
+		}
+
+		$frete = $this->getFrete();
+		if(!empty($frete) && !empty($frete['valor']))
+		{
+			$valor += $frete['valor'];
+		}
+
+		$this->setTotal($valor);
 
 		return $this;
 	}
@@ -200,25 +253,37 @@ class Carrinho
 		return $this->getStorage()->total;
 	}
 
+	public function setSubTotal($subTotal)
+	{
+		$this->getStorage()->subTotal = $subTotal;
+
+		return $this;
+	}
+
+	public function getSubTotal()
+	{
+		return $this->getStorage()->subTotal;
+	}
+
 	public function getCliente()
 	{
-	    return $this->_cliente;
+	    return $this->getStorage()->cliente;
 	}
 
 	public function setCliente($cliente)
 	{
-	    $this->_cliente = $cliente;
+	    $this->getStorage()->cliente = $cliente;
 
 	    return $this;
 	}
 	public function getEndereco()
 	{
-	    return $this->_endereco;
+	    return $this->getStorage()->endereco;
 	}
 
 	public function setEndereco($endereco)
 	{
-	    $this->_endereco = $endereco;
+	    $this->getStorage()->endereco = $endereco;
 
 	    return $this;
 	}
@@ -233,6 +298,9 @@ class Carrinho
 			case self::LIMPA_CUPOM:
 				$this->getStorage()->cupom = false;
 			break;
+			case self::LIMPA_FRETE:
+				$this->getStorage()->frete = false;
+			break;
 			case self::LIMPA_CLIENTE:
 				$this->getStorage()->cliente = false;
 			break;
@@ -244,9 +312,11 @@ class Carrinho
 				$this->getStorage()->cupom = false;
 				$this->getStorage()->cliente = false;
 				$this->getStorage()->endereco = false;
+				$this->getStorage()->frete = false;
 			break;
 		}
 
+		$this->atualizaSubTotal();
 		$this->atualizaTotal();
 	}
 }
