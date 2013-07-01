@@ -79,8 +79,32 @@ class Pagseguro extends GatewayAbstract
 
 		$_telefone = explode(' ', $this->getCarrinho()->getCliente()->telefone);
 
-		$ddd = str_replace(array('-', '.', '(', ')'), null, trim($_telefone[0]));
-		$telefone = str_replace(array('-', ' ', '.'), null, trim($_telefone[1]));
+		if(count($_telefone) == 2)
+		{
+			$ddd = str_replace(array('-', '.', '(', ')'), null, trim($_telefone[0]));
+			$telefone = str_replace(array('-', ' ', '.'), null, trim($_telefone[1]));
+
+			if(strlen($ddd) <> 2
+				|| strlen($telefone) < 8
+				|| strlen($telefone) > 9)
+			{
+				throw new InvalidArgumentException('Telefone inválido.');
+			}
+		}
+		else
+		{
+			$_telefone = str_replace(array('-', '.', '(', ')'), null, trim(array_shift($_telefone)));
+
+			if(strlen($_telefone) >= 10)
+			{
+				$ddd = substr($_telefone, 0, 2);
+				$telefone = substr($_telefone, 2);
+			}
+			else
+			{
+				throw new InvalidArgumentException('Telefone inválido.');
+			}
+		}
 
 		$paymentRequest->setSender(
 			substr($this->getCarrinho()->getCliente()->nome, 0, 50),
