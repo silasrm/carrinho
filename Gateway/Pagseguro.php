@@ -52,9 +52,9 @@ class Pagseguro extends GatewayAbstract
 		{
 			$paymentRequest->addItem(
 				$item->id,
-				$item->nome,
+				substr($item->nome, 0, 100),
 				$item->quantidade,
-				money_format('%!i', $item->valor_unidade),
+				str_replace(',', null, money_format('%!i', $item->valor_unidade)),
 				$item->peso,
 				$item->custo_frete
 			);

@@ -31,6 +31,8 @@ abstract class StorageAbstract implements \IteratorAggregate
 		return $this;
 	}
 
+	public abstract function remove();
+
 	public abstract function getIterator();
 
 	public abstract function __get($name);

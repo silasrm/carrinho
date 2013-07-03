@@ -58,4 +58,9 @@ class Session extends StorageAbstract
 
 		$_SESSION[$this->getStorageName()][$name] = $value;
 	}
+
+	public function remove()
+	{
+		unset($_SESSION[$this->getStorageName()]);
+	}
 }

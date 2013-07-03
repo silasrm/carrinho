@@ -7,7 +7,7 @@ abstract class GatewayAbstract
 	protected $_carrinho = null;
 	protected $_config = null;
 
-	public function __construct(Carrinho $carrinho = null, array $config = null, array $extra = null)
+	public function __construct(\Carrinho\Carrinho $carrinho = null, array $config = null, array $extra = null)
 	{
 		if(!empty($carrinho))
 		{

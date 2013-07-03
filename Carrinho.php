@@ -319,4 +319,9 @@ class Carrinho
 		$this->atualizaSubTotal();
 		$this->atualizaTotal();
 	}
+
+	public function remove()
+	{
+		$this->getStorage()->remove();
+	}
 }
