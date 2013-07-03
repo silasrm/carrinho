@@ -68,7 +68,7 @@ class Pagseguro extends GatewayAbstract
 
 		if( $valorDescontos > 0 )
 		{
-			$paymentRequest->setExtraAmount(-money_format('%!i', $valorDescontos));
+			$paymentRequest->setExtraAmount(-str_replace(',', null, money_format('%!i', $valorDescontos)));
 		}
 
 		$extra = $this->getExtra();
