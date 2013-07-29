@@ -60,6 +60,13 @@ class Pagseguro extends GatewayAbstract
 			);
 		}
 
+		$frete = $this->getCarrinho()->getFrete();
+
+		if(!empty($frete) && $frete instanceOf \Carrinho\Frete)
+		{
+			$paymentRequest->getShipping()->setCost(str_replace(',', null, money_format('%!i', $frete->valor)));
+		}
+
 		$valorDescontos = 0;
 		if( !is_null($this->getCarrinho()->getCupom()) )
 		{
